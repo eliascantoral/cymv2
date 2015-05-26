@@ -1,0 +1,48 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 3/04/2015, 07:23:24 PM
+    Author     : Augusto
+*/
+
+body { padding-top: 70px;  background-color: #eee;}
+#ajax_loader{
+	background: url(image/ajax-loader.gif) no-repeat 50% 50%;
+	background-size: 60px 60px;
+	background-color:rgba(240,240,240,0.5);
+}
+.message{
+    display: none;
+}
+.element_hidden{
+    display: none;
+}
+#misdatos{
+  max-width: 500px;
+  padding: 15px;
+  margin: 0 auto;
+}
+#wrapper-table{
+    max-width: 1000px;
+    width: auto;
+    overflow-x: auto;
+}
+#container-table{
+    width: auto;
+}
+.table-size-a{
+    width: 300px !important;
+}
+.table-size-b{
+    width: 200px !important;
+}
+.table-size-c{
+    width: 100px !important;
+}
+
+.txt_white{
+    color: #fff !important;
+}
