@@ -82,7 +82,7 @@ $participant = get_groupuser($group);
                                     //print_array($userproyect);
                                     if(sizeof($userproyect)>0){ ?>
                                             <a class="link_popover_proyectinfo" tabindex="0" role="button" data-toggle="popover" data-trigger="focus" title="<?php echo $userproyect[0][1];?>" val="<?php echo $userproyect[0][0];?>" href="#"><img src="image/<?php echo $userproyect[0][2]=="2"?"eyehide":"eye";?>.png" width="40px" alt="Info" title="Información"></a>
-                                            <a href="review.php?id=<?php echo $userproyect[0][0];?>" target="_blank"><img src="image/review.png" width="40px" alt="Revizar" title="Revizar proyecto"></a>
+                                            <a href="review.php?group=<?php echo $group;?>&id=<?php echo $userproyect[0][0];?>" target=""><img src="image/review.png" width="40px" alt="Revizar" title="Revizar proyecto"></a>
                                             <a href="#" class="iluminate" val="proyect_<?php echo $userproyect[0][0];?>"><img src="image/lookfor.png" width="40px" alt="Iluminar" title="Ilumniar"><input type="hidden" id="proyect_<?php echo $userproyect[0][0];?>_status" value="0"></a>                                            
                                     <?php } ?>
 
@@ -169,7 +169,8 @@ $participant = get_groupuser($group);
   </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 <script>     
-    $(".link_popover_proyectinfo").click(function(){
+    $(".link_popover_proyectinfo").click(function(event){
+        event.preventDefault();
         var proyectid = $(this).attr("val");
         ajax_("6","&proyectid="+ proyectid + "&group=<?php echo $group;?>", false, "ajax_answer");
         $(this).popover({

@@ -5,7 +5,7 @@
 	}
 	function get_variable($var){
 		switch($var){
-			case "home": return "http://localhost/cymv2";
+			case "home": return "http://beta.akademeia.ufm.edu/cymv2";
 			case "ajax": return "function/service.php";
 			default:{return "";}
 		}

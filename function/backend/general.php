@@ -10,5 +10,4 @@
 	
 	/** MySQL hostname */
 	define('DB_HOST2', 'dbakademeiaufm.c0jpxvqoqqhh.us-east-1.rds.amazonaws.com');
-
 ?>

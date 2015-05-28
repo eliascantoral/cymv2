@@ -398,32 +398,38 @@
                                $groupstructure = $this->get_groupestructure($group);
                                //print_array($groupstructure);
                                $total = 0;
+                               $complete = 0;
                                for($i=0;$i<sizeof($groupstructure);$i++){
-                                   $total+=sizeof($groupstructure[$i][1]);
                                    for($e=0;$e<sizeof($groupstructure[$i][1]);$e++){
-                                       echo $this->get_proyectsectioncontent($proyectid, $groupstructure[$i][1][$e]);
+                                       $section_content = $this->get_proyectsectioncontent($proyectid, $groupstructure[$i][1][$e]);
+                                       $total++;
+                                       if($section_content[0]){
+                                           $complete++;
+                                       }
                                    }
                                }
-                               echo $total;
+                               $return = array($total, $complete);
                                $this->close_connect($con);
                                return $return;
                         }                                                                           
                         function get_proyectsectioncontent($proyectid, $sectionid){
                             $con = $this->start_connect();
-                            $return = false;
-                            $query = "SELECT `type` FROM `section` WHERE `id`='".$sectionid."';";
+                            $return = array(false,"");
+                            $query = "SELECT `type` FROM `section` WHERE `id`='".$sectionid."';";                            
                             $result = $this->makequery($query);
                             if($result[0]){
                                 while($row = mysqli_fetch_array($result[1])){
                                     $type = $row['type'];
                                     switch ($type){
-                                    case "0":{
-                                        $query2 = "SELECT * FROM `work` WHERE `proyect_id`='".$proyectid."' AND `secction_id`='".$sectionid."';";
+                                    case "0":{                                        
+                                        $query2 = "SELECT * FROM `work` WHERE `proyect_id`='".$proyectid."' AND `section_id`='".$sectionid."' AND `work`<>'<p>Ingresar Contenido</p>';";                                        
                                         $result2 = $this->makequery($query2);
-                                        if($result2[0]){
-                                            while($row2 = mysqli_fetch_array($result2)){
-                                                $result = array(true,array($row2['id'],$row2['work'],$row2['date_start'],$row2['date_mod'],$row2['score']));
+                                        if($result2[0]){                                            
+                                            while($row2 = mysqli_fetch_array($result2[1])){
+                                                $return = array(true,array($row2['id'],$row2['work'],$row2['date_start'],$row2['date_mod'],$row2['score']));
+                                                //echo $row2["work"];
                                             }
+                                        }else{
                                         }
                                         break;}
                                     }

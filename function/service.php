@@ -89,8 +89,14 @@
             case "6":{///get basic proyect info
                     if(isset($_POST["proyectid"])){
                         include('logic.php');
-                        get_proyectinfo($_POST["proyectid"],$_POST["group"]);
-                        ?>                   
+                        $proyect_info = get_proyectinfo($_POST["proyectid"],$_POST["group"]);
+                        //print_array($proyect_info);
+                        ?>        
+                            <div class="progress">
+                              <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="2" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em; width: <?php echo round($proyect_info[1]/$proyect_info[0]*100);?>%;">
+                                <?php echo round($proyect_info[1]/$proyect_info[0]*100);?>%
+                              </div>
+                            </div>                                              
                         <?php                         
                     }
                     break;}
