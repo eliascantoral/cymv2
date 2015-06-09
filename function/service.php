@@ -100,6 +100,16 @@
                         <?php                         
                     }
                     break;}
+            case "7":{///save feedback
+                    include('logic.php');
+                     session_start();
+                    //print_array($_POST);
+                    if(isset($_POST["proyect"]) && isset($_POST["step"]) && isset($_POST["section"]) && isset($_POST["comment"]) && isset($_POST["rating"])  && isset($_POST["referal"])){
+                        $referal = $_POST["referal"]==true?"1":"0";
+                        $result = save_feedback($_POST["proyect"], $_POST["step"], $_POST["section"], $_POST["comment"], $_POST["rating"], $referal);
+                        if($result){echo "1";}else{echo "0";}
+                    }
+                break;}
         }
         
     }

@@ -9,6 +9,7 @@
 include_once 'header.php';
 $option = isset($_GET["opt"])?$_GET["opt"]:"1";
 ?>
+<div class="container">
 <?php if(is_login()){?>
 <?php 
     if(!isset($_GET["group"]) || !isset($_GET["id"])) {?><div class="alert alert-danger" role="alert">Acceso no valido.</div><?php }else{
@@ -33,11 +34,14 @@ $option = isset($_GET["opt"])?$_GET["opt"]:"1";
             case "0":{
                     include_once 'block/proyect/revision.php';
                 break;}
+            case "2":{
+                    include_once 'block/proyect/printview.php';
+            }
         }
     }
 
     }else{
     
 } ?>
-
+    </div>
 <?php include_once 'footer.php';?>

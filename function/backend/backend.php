@@ -324,24 +324,52 @@
                             $this->close_connect($con);
                             return $proyect_list;
                         }
-                        function get_groupestructure($group){
+                        function get_groupestructure($group, $data = false){
                             $con = $this->start_connect();
                             $estructura = array();
-                            $query = "SELECT `structure` FROM `group` WHERE `id`='".$group."';";
+                            $query = "SELECT `structure` FROM `group` WHERE `id`='".$group."';";                            
                             $result = mysqli_query($con, $query);
                             if($result){
                                 while($row = mysqli_fetch_array($result)){
                                     $data_string = $row['structure'];
                                     $data_array = explode("|", $data_string);
-                                    for($i=0;$i<sizeof($data_array);$i++){
+                                    for($i=0;$i<sizeof($data_array);$i++){                                        
                                         $data_step = explode(",", $data_array[$i]);
                                         $step = array();
                                         $section = array();
-                                        for($e=0;$e<sizeof($data_step);$e++){                                            
-                                            if($e==0){
-                                                array_push($step,$data_step[$e]);                                                
+                                        for($e=0;$e<sizeof($data_step);$e++){                                                                                        
+                                            if($e==0){                     
+                                                if($data){
+                                                    $query2 = "SELECT * FROM `step` WHERE `id`='".$data_step[$e]."'";
+                                                    $result2 = $this->makequery($query2);
+                                                    if($result2[0]){
+                                                        while ($row2 = mysqli_fetch_array($result2[1])){
+                                                            $stepid = $row2['id'];
+                                                            $stepname = $row2['name'];
+                                                            $stepdesc = $row2['desc'];                                                            
+                                                            array_push($step,array($stepid,$stepname,$stepdesc));
+                                                        }
+                                                    }
+                                                }else{
+                                                    array_push($step,$data_step[$e]);
+                                                }
                                             }else{
-                                                array_push($section, $data_step[$e]);                                                
+                                                if($data){
+                                                    $sectionid = "0";
+                                                    $sectionname = "";
+                                                    $query2 = "SELECT * FROM `section` WHERE `id`='".$data_step[$e]."' AND `id_section` IS NULL ORDER BY `order` ASC";                                                   
+                                                    $result2 = $this->makequery($query2);
+                                                    if($result2[0]){
+                                                        while($row2 = mysqli_fetch_array($result2[1])){
+                                                            $sectionid = $row2['id'];
+                                                            $sectionname = $row2['name'];
+                                                            $type = $row2['type'];
+                                                        }
+                                                    }
+                                                    array_push($section, array($sectionid,$sectionname,$type));  
+                                                }else{
+                                                    array_push($section, $data_step[$e]);                                                
+                                                }                                                
                                             }
                                         }
                                          array_push($step,$section);
@@ -439,8 +467,126 @@
                             }
                             $this->close_connect($con);
                             return $return;
-                            
                         }
+                        function get_proyectindicadores($proyect){
+                            $return = array(false,"Error.");
+                            $query = "SELECT `id`,`name`,`continuo`,`defect_unit`,`defect_byunit`,`effectiveness`,`efficiency`,`is_use` FROM `indicadores` WHERE `proyect`='".$proyect."' AND `status`='1'";
+                            $result = $this->makequery($query);
+                            if($result[0]){
+                                $return = array();
+                                while($row = mysqli_fetch_array($result[1])){                                    
+                                    array_push($return, array($row['id'],$row['name'],$row['continuo'],$row['defect_unit'],$row['defect_byunit'],$row['effectiveness'],$row['efficiency'],$row['is_use']));
+                                }
+                            }else{
+                                $return = $result;
+                            }
+                            return $return;
+                        }
+                        function get_proyectindicadoresused($proyect){
+                            $return = array(false,"Error.");
+                            $query = "SELECT `id`,`name`,`desc`,`justifi`,`method`,`show`  FROM `indicadores` WHERE `proyect`='".$proyect."' AND `status`='1' AND `is_use`='1' ";
+                            $result = $this->makequery($query);
+                            if($result[0]){
+                                $return = array();
+                                while($row = mysqli_fetch_array($result[1])){                                    
+                                    array_push($return, array($row['id'],$row['name'],$row['desc'],$row['justifi'],$row['method'],$row['show']));
+                                }
+                            }else{
+                                $return = $result;
+                            }
+                            return $return;                            
+                        }
+                        function get_proyectphea($proyect){
+                            $return = array(false,"Error.");
+                            $query = "SELECT `id`,`causa`,`solucion`,`justificacion`,`resultado` FROM `phea` WHERE `proyect`='".$proyect."' AND `status`='1'";
+                            $result = $this->makequery($query);
+                            if($result[0]){
+                                $return = array();
+                                while($row = mysqli_fetch_array($result[1])){                                    
+                                    array_push($return, array($row['id'],$row['causa'],$row['solucion'],$row['justificacion'],$row['resultado']));
+                                }
+                            }else{
+                                $return = $result;
+                            }
+                            return $return;                               
+                        }
+                        function get_proyectdata($proyect= false){
+                            $return = array(false, "Error");
+                            $query = "SELECT `id`,`name`,`description`,`industry_id`,`process`,`rate` FROM `proyect`";
+                            if($proyect!==false)$query = "SELECT `id`,`name`,`description`,`industry_id`,`process`,`rate` FROM `proyect` WHERE `id`='".$proyect."';";
+                            $result = $this->makequery($query);
+                            if($result[0]){
+                                while($row = mysqli_fetch_array($result[1])){
+                                    $return = array($row['id'],$row['name'],$row['description'],$row['industry_id'],$row['process'],$row['rate']);
+                                }
+                            }else{
+                                $return = $result;
+                            }
+                            return $return;
+                        }
+                        
+                        
+                        function get_industry($id=false){                            
+                            $return = array(false,"Error");
+                            $query = "SELECT `id`,`name`,`desc` FROM `industry`";
+                            if($id!==false)$query = "SELECT `id`,`name`,`desc` FROM `industry` WHERE `id`='".$id."';";
+                            $result = $this->makequery($query);
+                            if($result[0]){
+                                $return = array();
+                                while($row = mysqli_fetch_array($result[1])){
+                                    array_push($return, array($row['id'],$row['name'],$row['desc']));
+                                }
+                                if($id!==false)return $return[0];
+                            }else{
+                                $return = $result;
+                            }
+                            
+                            return $return;
+                        }
+                        function get_process($id=false){
+                            $return = array(false,"Error");
+                            $query = "SELECT `id`,`name`,`desc` FROM `process`";
+                            if($id!==false)$query = "SELECT `id`,`name`,`desc` FROM `process` WHERE `id`='".$id."';";
+                            $result = $this->makequery($query);
+                            if($result[0]){
+                                $return = array();
+                                while($row = mysqli_fetch_array($result[1])){
+                                    array_push($return, array($row['id'],$row['name'],$row['desc']));
+                                }
+                                if($id!==false)return $return[0];
+                            }else{
+                                $return = $result;
+                            }
+                            return $return;
+                        }                        
+/***************************************************************************************************************/                        
+/***************************************************************************************************************/                        
+                        function save_stepreview($proyect, $user, $step, $comment, $referal){
+                            $return = false;
+                            $feedbackid = "";
+                            $query = "SELECT `id` FROM `step_feedback` WHERE `step`='".$step."' AND `proyect`='".$proyect."' AND `user`='".$user."';";
+                            $result = $this->makequery($query);
+                            if($result[0]){
+                                while($row = mysqli_fetch_array($result[1])){
+                                    $feedbackid = $row['id'];
+                                }
+                            }
+                             echo $query;
+                            $query = "INSERT INTO `step_feedback` (`id` ,`step` ,`proyect` ,`user` ,`content` ,`refer`)
+                                       VALUES (NULL ,  '".$step."',  '".$proyect."',  '".$user."',  '".$comment."',  '".$referal."');";
+                            if($feedbackid!="") $query = "UPDATE `step_feedback` SET `content` =  '".$comment."',`refer`='".$referal."' WHERE  `step_feedback`.`id` ='".$feedbackid."';";
+                            
+                            
+                            
+                            echo $query;
+                            $result = $this->makequery($query);
+                            if($result[0]){
+                                $return = true;
+                            }
+                            return $result;
+                        }
+                        
+/***************************************************************************************************************/                                                
 /***************************************************************************************************************/                        
                         function get_mainmenu($rol){
                             $con = $this->start_connect();
@@ -460,6 +606,5 @@
                             $this->close_connect($con);
                             return $menu;
                         }
-
 	}
 ?>

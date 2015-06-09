@@ -26,6 +26,7 @@ and open the template in the editor.
         <script src="js/jquery.min.js"></script>
         <script src="js/jquery-ui/jquery-ui.js"></script>
         <script src="style/bootstrap/js/bootstrap.min.js"></script>
+        <script src="js/jquery-bar-rating-master/jquery.barrating.js"></script>
 
     </head>
     <body>
@@ -41,7 +42,7 @@ and open the template in the editor.
                         <span class="icon-bar"></span>
                         </button>
                         <a class="navbar-brand" href="<?php echo get_variable("home");?>">
-                          <img alt="Brand" src="image/banner.png" height="100%">
+                          <img alt="Brand" src="image/logomin.png" height="100%">
                       </a>
                     </div>                     
                     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">            

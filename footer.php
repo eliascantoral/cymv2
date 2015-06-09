@@ -59,7 +59,6 @@
 			ajax_end();
 		  },
 		  beforeSend:function(){                      
-			
 		  },
 		  error:function(objXMLHttpRequest){ajax_end();console.log(objXMLHttpRequest);}
 		});

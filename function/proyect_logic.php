@@ -6,10 +6,10 @@
  * and open the template in the editor.
  */
 
-function get_proyectstructure($group = '0'){
+function get_proyectstructure($group = '0',$data = false){
     include_once 'backend/backend.php';
     $backend = new backend();
-    if($group!='0') return $backend->get_groupestructure($group);
+    if($group!='0') return $backend->get_groupestructure($group, $data);
     return $backend->get_structureoptions();
     
 }
@@ -43,6 +43,7 @@ function setunsetstep($group, $step){
             case "3":$newstep = "3,8,9,11,15,29,30";break;
             case "4":$newstep = "4,16,17,18,19";break;
             case "5":$newstep = "5,20,36";break;
+            case "6":$newstep = "6,22";break;
         }
         for($i=0;$i<sizeof($alloptions);$i++){
             $existe = array_contain($groupoptions, $alloptions[$i][0][0], 0);            
@@ -110,4 +111,75 @@ function get_proyectinfo($proyectid, $group, $resume = true){
     $backend = new backend();
     if ($resume) return $backend->get_proyectresume($proyectid, $group);
     return false;
+}
+
+
+function get_proyectsectioncontent($proyect, $section){
+    include_once 'backend/backend.php';
+    $backend = new backend();
+    return $backend->get_proyectsectioncontent($proyect, $section);
+}
+
+function get_proyectindicadores($proyect){
+    include_once 'backend/backend.php';
+    $backend = new backend();
+    return $backend->get_proyectindicadores($proyect);
+}
+
+function get_proyectindicadoresused($proyect){
+    include_once 'backend/backend.php';
+    $backend = new backend();
+    return $backend->get_proyectindicadoresused($proyect);
+}
+
+function get_proyectphea($proyect){
+    include_once 'backend/backend.php';
+    $backend = new backend();
+    return $backend->get_proyectphea($proyect);
+}
+
+function get_proyectdata($proyect){
+    include_once 'backend/backend.php';
+    $backend = new backend();
+    $data = $backend->get_proyectdata($proyect);
+    $industries = $data[3];
+    $data[3] = array();
+    $processes = $data[4];
+    $data[4] = array();
+    
+    $industry = explode(",", $industries);
+    for($i=0;$i<sizeof($industry);$i++){
+        if($industry[$i]!=""){            
+            array_push($data[3], $backend->get_industry($industry[$i]));            
+        }
+    }
+    $process = explode(",", $processes);
+    for($i=0;$i<sizeof($process);$i++){
+        if($process[$i]!=""){
+            array_push($data[4], $backend->get_process($process[$i]));
+        }        
+    }
+    return $data;
+}
+
+
+
+/****************************************************************************************/
+/************************************************REVIEW**********************************/
+/****************************************************************************************/
+
+function save_feedback($proyect, $step, $section, $coment, $rate, $referal){
+    $userid = is_login();
+    $return = false;
+    if($userid){
+        include_once 'backend/backend.php';
+        $backend = new backend();
+
+        if($section==""){
+            $return = $backend->save_stepreview($proyect, is_login(), $step, $coment, $referal);
+        }else{
+
+        }        
+    }
+    return $return;
 }
