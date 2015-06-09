@@ -7,12 +7,12 @@
  */
 
 $mainmenuopt = isset($_GET["opt"])? $_GET["opt"]: "1";///Activa la primera opcion del main menu
-
+echo "--33---3333----333---3";
 ?>
 <div class="row">
     <div class="col-xs-12 col-sm-4 col-md-4">
             <?php include 'block/mainmenu.php';?>
-          
+    
     </div>    
     <div class="col-xs-12 col-sm-8 col-md-8">
         <?php 
