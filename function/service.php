@@ -90,7 +90,6 @@
                     if(isset($_POST["proyectid"])){
                         include('logic.php');
                         $proyect_info = get_proyectinfo($_POST["proyectid"],$_POST["group"]);
-                        //print_array($proyect_info);
                         ?>        
                             <div class="progress">
                               <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="2" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em; width: <?php echo round($proyect_info[1]/$proyect_info[0]*100);?>%;">
@@ -102,10 +101,10 @@
                     break;}
             case "7":{///save feedback
                     include('logic.php');
-                     session_start();
                     //print_array($_POST);
+                    session_start();
                     if(isset($_POST["proyect"]) && isset($_POST["step"]) && isset($_POST["section"]) && isset($_POST["comment"]) && isset($_POST["rating"])  && isset($_POST["referal"])){
-                        $referal = $_POST["referal"]==true?"1":"0";
+                        $referal = $_POST["referal"]==="true"?"1":"0";
                         $result = save_feedback($_POST["proyect"], $_POST["step"], $_POST["section"], $_POST["comment"], $_POST["rating"], $referal);
                         if($result){echo "1";}else{echo "0";}
                     }

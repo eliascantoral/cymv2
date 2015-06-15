@@ -5,8 +5,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 switch($option){
+    case "0":{///Modo de impresión
+            if($content[0]){
+                out($content[1][1]);
+            }else{
+                echo "Sin contenido.";
+            }        
+        break;}
     case "2":{///Modo de impresión
             if($content[0]){
                 out($content[1][1]);

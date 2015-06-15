@@ -6,13 +6,15 @@
  * and open the template in the editor.
  */
 $section = "";
+$feedback = get_feedback($proyectid, $step, $section);
+//print_array($feedback);
 ?>
 <div class="alert alert-warning" role="alert">
     <form class="form_review"> 
       <div class="form-group group-comment">
         <label class="col-sm-2 control-label">Comentario</label>
         <div class="col-sm-10">
-            <textarea class="form-control comment" placeholder="Comentario"></textarea>
+            <textarea class="form-control comment" placeholder="Comentario"><?php echo $feedback!==false?$feedback[1]:""?></textarea>
         </div>
       </div>
       <div class="form-group group-rating hidden">
@@ -30,7 +32,7 @@ $section = "";
       <div class="form-group group-refered">
           <label class="col-sm-2 control-label">Recomendar</label>
            <div class="col-sm-10">
-               <input type="checkbox" class="refered">
+               <input type="checkbox" class="refered" <?php echo $feedback[2]=="1"?'checked=""':'';?>>
            </div>
       </div>
       <div class="form-group form-group">

@@ -176,9 +176,25 @@ function save_feedback($proyect, $step, $section, $coment, $rate, $referal){
         $backend = new backend();
 
         if($section==""){
-            $return = $backend->save_stepreview($proyect, is_login(), $step, $coment, $referal);
-        }else{
+            $return = $backend->save_stepreview($proyect, $userid, $step, $coment, $referal);
+        }else{  
+            $return = $backend->save_sectionreview($section,$userid,$coment,$referal,$rate);
+        }        
+    }
+    return $return;
+}
 
+function get_feedback($proyect, $step, $section){
+    $userid = is_login();
+    $return = false;
+    if($userid){
+        include_once 'backend/backend.php';
+        $backend = new backend();
+
+        if($section==""){
+            $return = $backend->get_stepfeedback($proyect, $userid, $step);
+        }else{
+            $return = $backend->get_sectionfeedback($userid, $section);
         }        
     }
     return $return;

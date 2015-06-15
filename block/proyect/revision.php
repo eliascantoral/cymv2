@@ -8,6 +8,7 @@
 
 $estructure = get_proyectstructure($group, true);
 $proyectdata = get_proyectdata($proyectid);
+//print_array($estructure);
 $step = isset($_GET['step'])?$_GET['step']:"0";
 ?> 
 <input type="text" id="ajax-answer" value="">
@@ -17,10 +18,11 @@ $step = isset($_GET['step'])?$_GET['step']:"0";
     <li role="presentation" <?php echo $step==$i+1?'class="active"':"";?>><a href="?group=<?php echo $group;?>&id=<?php echo $proyectid;?>&opt=<?php echo $option;?>&step=<?php echo $i+1;?>"><?php out($estructure[$i][0][1]);?></a></li>                       
     <?php }?>
 </ul>  
-
 <?php
+    $step++;
+    
     switch($step){
-        case "0":{
+        case "1":{
                 include 'review/review0.php';
             ?>
                 <h3>
@@ -46,7 +48,34 @@ $step = isset($_GET['step'])?$_GET['step']:"0";
                 </div>            
             <?php
             break;}
-        default:{echo "*.*";}
+        default:{
+        
+            include 'review/review0.php';
+            $stepdata = $estructure[$step-2][1];
+            for($i=0;$i<sizeof($stepdata);$i++){?>
+                <div class="well well-sm">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <strong><?php out($stepdata[$i][1]);?></strong>
+                        </div>
+                        <div class="panel-body section-content">            
+            <?php                              
+                switch($stepdata[$i][2]){
+                    case "0":{
+                        $content = get_proyectsectioncontent($proyectid, $stepdata[$i][0]);
+                        //print_array($content);
+                        $section = $content[1][0]; 
+                        include 'review/review1.php'; 
+                        include 'section/section0.php';
+                        break;}
+                }?>
+                        </div>
+                    </div>
+                </div>                             
+            <?php
+            }
+            //print_array($stepdata);            
+        }
     }
 ?>
 
@@ -60,12 +89,18 @@ $step = isset($_GET['step'])?$_GET['step']:"0";
     $(".form_review").submit(function(event){
         var step = $(this);
         event.preventDefault();        
-        var comment = step.children(".group-comment").children(".col-sm-10").children(".comment").val();
+        var comment = encodeURIComponent(step.children(".group-comment").children(".col-sm-10").children(".comment").val());
         var thestep = step.children(".form-group").children(".step_id").val();
         var thesection = step.children(".form-group").children(".section_id").val();
         var refered = step.children(".group-refered").children(".col-sm-10").children(".refered").is(':checked');
         var rating = $("#rating_"+thestep+"_"+thesection).val();
         ajax_("7","&proyect=<?php echo $proyectid?>&step="+thestep+"&section="+thesection+"&comment="+comment+"&referal="+refered+"&rating="+rating,false,"ajax-answer");
+        var result = $("#ajax-answer").val();
+        if(result=="1"){
+            show_message("messagefeedbackok_"+thestep+"_"+thesection,"Se ha guardado correctamente.");
+        }else{
+            show_message("messagefeedbacknok_"+thestep+"_"+thesection,"Ocurrio un error al guardar.");
+        }
         //alert(comment + thestep + thesection + rating +refered);
     });
 </script>

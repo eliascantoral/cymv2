@@ -571,21 +571,57 @@
                                     $feedbackid = $row['id'];
                                 }
                             }
-                             echo $query;
                             $query = "INSERT INTO `step_feedback` (`id` ,`step` ,`proyect` ,`user` ,`content` ,`refer`)
                                        VALUES (NULL ,  '".$step."',  '".$proyect."',  '".$user."',  '".$comment."',  '".$referal."');";
                             if($feedbackid!="") $query = "UPDATE `step_feedback` SET `content` =  '".$comment."',`refer`='".$referal."' WHERE  `step_feedback`.`id` ='".$feedbackid."';";
-                            
-                            
-                            
-                            echo $query;
                             $result = $this->makequery($query);
                             if($result[0]){
                                 $return = true;
                             }
                             return $result;
                         }
-                        
+                        function get_stepfeedback($proyect, $user, $step){
+                            $return = false;
+                            $query = "SELECT * FROM `step_feedback` WHERE `step`='".$step."' AND `proyect`='".$proyect."' AND `user`='".$user."';";
+                            $result = $this->makequery($query);
+                            if($result[0]){
+                                while($row = mysqli_fetch_array($result[1])){
+                                    $return = array($row['id'],$row['content'],$row['refer']);
+                                }
+                            }
+                            return $return;
+                        }
+                       function save_sectionreview($section, $user, $comment, $referal, $score){
+                            $return = false;
+                            $feedbackid = "";
+                            $query = "SELECT `id` FROM `evaluation` WHERE `user`='".$user."' AND `section`='".$section."';";                            
+                            $result = $this->makequery($query);
+                            if($result[0]){
+                                while($row = mysqli_fetch_array($result[1])){
+                                    $feedbackid = $row['id'];
+                                }
+                            }
+                            $query = "INSERT INTO `evaluation` (`id`, `section`, `user`, `score`, `comment`, `example`, `likes`) "
+                                    . "VALUES (NULL, '".$section."', '".$user."', '".$score."', '".$comment."', '".$referal."', '0');";
+                            if($feedbackid!="") $query = "UPDATE `evaluation` SET `comment` =  '".$comment."',`example`='".$referal."',`score`='".$score."' WHERE  `id` ='".$feedbackid."';";
+                            
+                            $result = $this->makequery($query);
+                            if($result[0]){
+                                $return = true;
+                            }
+                            return $result;
+                        }
+                        function get_sectionfeedback($user, $section){
+                            $return = false;
+                            $query = "SELECT * FROM `evaluation` WHERE `user`='".$user."' AND `section`='".$section."';";                            
+                            $result = $this->makequery($query);
+                            if($result[0]){
+                                while($row = mysqli_fetch_array($result[1])){
+                                    $return = array($row['id'],$row['comment'],$row['score'],$row['example']);
+                                }
+                            }
+                            return $return;
+                        }                        
 /***************************************************************************************************************/                                                
 /***************************************************************************************************************/                        
                         function get_mainmenu($rol){
