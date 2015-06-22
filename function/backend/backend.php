@@ -443,17 +443,21 @@
                         function get_proyectsectioncontent($proyectid, $sectionid){
                             $con = $this->start_connect();
                             $return = array(false,"");
-                            $query = "SELECT `type` FROM `section` WHERE `id`='".$sectionid."';";                            
+                            $query = "SELECT `type` FROM `section` WHERE `id`='".$sectionid."';";    
+                            
                             $result = $this->makequery($query);
                             if($result[0]){
                                 while($row = mysqli_fetch_array($result[1])){
-                                    $type = $row['type'];
+                                    $type = $row['type'];                                    
                                     switch ($type){
                                     case "0":{                                        
-                                        $query2 = "SELECT * FROM `work` WHERE `proyect_id`='".$proyectid."' AND `section_id`='".$sectionid."' AND `work`<>'<p>Ingresar Contenido</p>';";                                        
+                                        $query2 = "SELECT * FROM `work` WHERE `proyect_id`='".$proyectid."' AND `section_id`='".$sectionid."' AND `work`<>'<p>Ingresar Contenido</p>';";
+                                        $query2 = "SELECT * FROM `work` WHERE `proyect_id`='".$proyectid."' AND `section_id`='".$sectionid."';";
+                                        //echo $query2;
                                         $result2 = $this->makequery($query2);
                                         if($result2[0]){                                            
                                             while($row2 = mysqli_fetch_array($result2[1])){
+                                                
                                                 $return = array(true,array($row2['id'],$row2['work'],$row2['date_start'],$row2['date_mod'],$row2['score']));
                                                 //echo $row2["work"];
                                             }
@@ -613,7 +617,8 @@
                         }
                         function get_sectionfeedback($user, $section){
                             $return = false;
-                            $query = "SELECT * FROM `evaluation` WHERE `user`='".$user."' AND `section`='".$section."';";                            
+                            $query = "SELECT * FROM `evaluation` WHERE `user`='".$user."' AND `section`='".$section."';";
+                            //echo $query;
                             $result = $this->makequery($query);
                             if($result[0]){
                                 while($row = mysqli_fetch_array($result[1])){
@@ -621,7 +626,24 @@
                                 }
                             }
                             return $return;
-                        }                        
+                        }   
+                        
+                        
+                        function get_worksection($userid, $proyect, $section){
+                            $query = "SELECT `work`.`id` FROM `work` INNER JOIN `enrol_proyect` ON `work`.`proyect_id`=`enrol_proyect`.`id_proyect` "
+                                    . " WHERE `work`.`section_id`='".$section."' "
+                                    . "AND `work`.`proyect_id`='".$proyect."'";
+                            $return = false;
+                            $result = $this->makequery($query);
+                            if($result[0]){
+                                while($row = mysqli_fetch_array($result[1])){
+                                    $return = array(true,$row['id']);
+                                }
+                            }else{
+                                $return = $result;
+                            }
+                            return $return;
+                        }
 /***************************************************************************************************************/                                                
 /***************************************************************************************************************/                        
                         function get_mainmenu($rol){

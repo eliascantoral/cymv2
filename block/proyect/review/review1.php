@@ -7,7 +7,7 @@
  */
 
 $feedback = get_feedback($proyectid, $step, $section);
-///print_array($feedback);
+//print_array($feedback);
 ?>
 <div class="alert alert-warning" role="alert">
     <form class="form_review"> 

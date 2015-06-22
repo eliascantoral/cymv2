@@ -6,7 +6,9 @@
  * and open the template in the editor.
  */
 switch($option){
-    case "2":{///Modo de impresión?>
+    case "0":
+    case "2":{///Modo de impresión
+        ?>
             <div class="table-responsive">
                 <table class="table table-striped table-hover">
                     <thead>
@@ -62,5 +64,6 @@ switch($option){
                 </table>
             </div>
        <?php break;}
+        default : echo "*-*";
 }
 ?>

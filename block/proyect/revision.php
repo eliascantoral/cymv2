@@ -8,9 +8,11 @@
 
 $estructure = get_proyectstructure($group, true);
 $proyectdata = get_proyectdata($proyectid);
-//print_array($estructure);
 $step = isset($_GET['step'])?$_GET['step']:"0";
 ?> 
+<h2><strong>Proyecto: </strong><?php out($proyectdata[1]);?></h2>
+<p><?php echo $proyectdata[2];?></p>
+
 <input type="text" id="ajax-answer" value="">
 <ul class="nav nav-tabs nav-justified">
     <li role="presentation" <?php echo $step=='0'?'class="active"':"";?>><a href="?group=<?php echo $group;?>&id=<?php echo $proyectid;?>&opt=<?php echo $option;?>&step=0">Resumen</a></li>
@@ -49,9 +51,8 @@ $step = isset($_GET['step'])?$_GET['step']:"0";
             <?php
             break;}
         default:{
-        
             include 'review/review0.php';
-            $stepdata = $estructure[$step-2][1];
+            $stepdata = $estructure[$step-2][1];            
             for($i=0;$i<sizeof($stepdata);$i++){?>
                 <div class="well well-sm">
                     <div class="panel panel-default">
@@ -62,12 +63,40 @@ $step = isset($_GET['step'])?$_GET['step']:"0";
             <?php                              
                 switch($stepdata[$i][2]){
                     case "0":{
-                        $content = get_proyectsectioncontent($proyectid, $stepdata[$i][0]);
-                        //print_array($content);
-                        $section = $content[1][0]; 
-                        include 'review/review1.php'; 
-                        include 'section/section0.php';
+                        $content = get_proyectsectioncontent($proyectid, $stepdata[$i][0]);                        
+                        if($content[0]!=""){
+                            $section = $content[1][0]; 
+                            include 'review/review1.php'; 
+                            include 'section/section0.php';                            
+                        }                       
                         break;}
+                    case "1":{///Sección repetitiva de indicadores                         
+                        $content = get_proyectindicadoresused($proyectid);  
+                        $section = get_worksection($proyectid, $stepdata[$i][0]);
+                        if($section[0]){
+                            $section = $section[1];                            
+                            include 'review/review1.php';
+                            include 'section/section1.php';                            
+                        }
+                        break;}
+                    case "2":{///Sección de indicadores     
+                        $content = get_proyectindicadores($proyectid);                        
+                        $section = get_worksection($proyectid, $stepdata[$i][0]);
+                        if($section[0]){
+                            $section = $section[1];                            
+                            include 'review/review1.php';
+                            include 'section/section2.php';                            
+                        }                                                                        
+                        break;}
+                    case "3":{///Sección de indicadores
+                        $content = get_proyectphea($proyectid);                       
+                        $section = get_worksection($proyectid, $stepdata[$i][0]);
+                        if($section[0]){
+                            $section = $section[1];                            
+                            include 'review/review1.php';
+                            include 'section/section3.php';
+                        }                                                                            
+                        break;}                        
                 }?>
                         </div>
                     </div>

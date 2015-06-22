@@ -199,3 +199,15 @@ function get_feedback($proyect, $step, $section){
     }
     return $return;
 }
+
+/*****************************************************************************/
+function get_worksection($proyect, $section){
+    $userid = is_login();
+    $return = false;
+    if($userid){
+        include_once 'backend/backend.php';
+        $backend = new backend();
+        $return = $backend->get_worksection($userid, $proyect, $section);
+    }
+    return $return;
+}

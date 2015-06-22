@@ -8,6 +8,7 @@
 
 
 switch($option){
+    case "0":
     case "2":{///Modo de impresión
             for($indi = 0; $indi<sizeof($content);$indi++){?>
                 <div class="panel panel-success">

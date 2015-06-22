@@ -7,6 +7,7 @@
  */
 //print_array($content);
 switch($option){
+    case "0":
     case "2":{///Modo de impresión
             if($content[0]){
                 for($phea = 0; $phea<sizeof($content);$phea++){?>
